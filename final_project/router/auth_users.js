@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 let books = require("./booksdb.js");
 const regd_users = express.Router();
 
-let users = [{username:'derekchen',password:'123456'}];
+let users = [];
 
 const isValid = (username)=>{ 
     const registered_user = [];
@@ -42,7 +42,7 @@ regd_users.put("/auth/review/:isbn", (req, res) => {
     if (isbn>0&&isbn<=Object.keys(books)) {
         reviews = books[isbn].reviews;
         reviews[username] = comment;
-        return res.status(200).json(books);
+        return res.status(200).json("Review Added thanks for your input!");
     } else {
         return res.status(404).send("Corrosponding book not found!");
     }
@@ -53,7 +53,7 @@ regd_users.delete("/auth/review/:isbn", (req, res) => {
     const username = req.user.data.username;
     if (isbn>0&&isbn<=Object.keys(books)) {
         delete books[isbn].reviews[username];
-        return res.status(200).send(books)
+        return res.status(200).send("Review Deleted!")
     } else {
         return res.status(404).send("User or ISBN not found!");
     }
