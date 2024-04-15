@@ -37,10 +37,12 @@ regd_users.post("/login", (req,res) => {
 // Add a book review
 regd_users.put("/auth/review/:isbn", (req, res) => {
     const isbn = req.params.isbn;
-    console.log(req.user);
+    const comment = req.query.comment;
+    const username = req.user.data.username;
     if (isbn>0&&isbn<=Object.keys(books)) {
         reviews = books[isbn].reviews;
-        reviews[req.user.data.username] = req.body
+        reviews[username] = comment;
+        return res.status(200).json(books);
     } else {
         return res.status(404).send("Corrosponding book not found!");
     }
