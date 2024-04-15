@@ -48,6 +48,17 @@ regd_users.put("/auth/review/:isbn", (req, res) => {
     }
 });
 
+regd_users.delete("/auth/review/:isbn", (req, res) => {
+    const isbn = req.params.isbn;
+    const username = req.user.data.username;
+    if (isbn>0&&isbn<=Object.keys(books)) {
+        delete books[isbn].reviews[username];
+        return res.status(200).send(books)
+    } else {
+        return res.status(404).send("User or ISBN not found!");
+    }
+});
+
 module.exports.authenticated = regd_users;
 module.exports.isValid = isValid;
 module.exports.users = users;
