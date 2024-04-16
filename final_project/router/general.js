@@ -21,52 +21,72 @@ public_users.post("/register", (req,res) => {
     return res;
 });
 
+function getAllBooks() {
+    return new Promise((resolve, reject) => {
+        resolve(books);
+    });
+}
+
 // Get the book list available in the shop
 public_users.get('/',function (req, res) {
-  return res.status(300).json(JSON.stringify(books));
+  getAllBooks().then((books) => res.status(200).send(books));
 });
+
+function getBookByISBN (isbn) {
+    return new Promise((resolve, reject) => {
+        let ISBN = parseInt(isbn);
+        if (books[ISBN]) {
+            resolve(books[ISBN]);
+        } else {
+            reject({status:404,message:"Book not found!"});
+        }
+    })
+}
 
 // Get book details based on ISBN
 public_users.get('/isbn/:isbn',function (req, res) {
-    const isbn = req.params.isbn;
-    if (isbn<=Object.keys(books).length && isbn > 0) {
-        res.status(300).json(books[isbn]);
-    }
-    else {
-        res.status(404).json({message:"Book not found, please enter a valid ISBN!"});
-    }
-    return res;
+    getBookByISBN(req.params.isbn).then(result=> res.send(result),error=>res.status(error.status).send(error.message));
 });
   
+
+function searchBookByAuthor (author) {
+    return new Promise((resolve,reject) => {
+        const key = Object.keys(books);
+        let book = [];
+        for (let i=0; i<key.length; i++) {
+            if (books[key[i]].author === author) {book.push(books[key[i]]);}
+        }
+        if (book.length>0) {
+            resolve(book)
+        } else {
+            reject({status:404,message:"book by that author not found!"})
+        }
+    });
+}
+
 // Get book details based on author
 public_users.get('/author/:author',function (req, res) {
-    const key = Object.keys(books);
-    let book = [];
-    for (let i=0; i<key.length; i++) {
-        if (books[key[i]].author === req.params.author) {book.push(books[key[i]]);}
-    }
-    if (book.length>0) {
-        res.status(300).json(book);
-    } else {
-        res.status(404).json({message: `No Books with author: ${req.params.author} found!`});
-    }
-    return res;
-    
+    searchBookByAuthor(req.params.author).then(result=>res.send(result),error=>res.status(error.status).send(error.message));
 });
+
+function searchBookByTitle(title) {
+    return new Promise((resolve,reject) => {
+        const key = Object.keys(books);
+        let book = [];
+        for (let i=0; i<key.length; i++) {
+            if (books[key[i]].title === title) {book.push(books[key[i]]);}
+        }
+        if (book.length>0) {
+            resolve(book);
+        } else {
+            reject({status:404,message:"Book by that title not found!"});
+        }
+    });
+}
 
 // Get all books based on title
 public_users.get('/title/:title',function (req, res) {
-    const key = Object.keys(books);
-    let book = [];
-    for (let i=0; i<key.length; i++) {
-        if (books[key[i]].title === req.params.title) {book.push(books[key[i]]);}
-    }
-    if (book.length>0) {
-        res.status(300).json(book);
-    } else {
-        res.status(404).json({message: `No Books with title: {req.params.author} found!`});
-    }
-    return res;
+    searchBookByTitle(req.params.title).then(result => res.send(result), error => res.status(error.status).send(error.message));
 });
 
 //  Get book review
