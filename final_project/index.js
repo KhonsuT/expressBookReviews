@@ -10,6 +10,12 @@ app.use(express.json());
 
 app.use("/customer",session({secret:"fingerprint_customer",resave: true, saveUninitialized: true}))
 
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
+
 app.use("/customer/auth/*", function auth(req,res,next){
     if(req.session.authorization) {
         let token = req.session.authorization['accessToken']; // Access Token
