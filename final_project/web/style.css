@@ -1,0 +1,12 @@
+.login {
+    border-radius: 1cm;
+    margin-left: 45%;
+    margin-right: 45%;
+    padding: 20px;
+    border-color: black ;
+    border-width: 0.1cm;
+    border-style: solid;
+    font-size: 30px;
+    width: 10%;
+    text-align: center;
+}

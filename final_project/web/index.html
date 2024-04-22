@@ -3,10 +3,25 @@
     <head>
         <title>Test Page</title>
         <script src = "webScript.js"></script>
+        <link rel="stylesheet" href="style.css">
     </head>
     <body>
-        <h1> Test Page </h1>
-        <button onclick="myButton()">Click</button>
-        <span id="printscreen"></span>
+        <div class="login">
+            <form>
+                <label>Username</label>
+                <br>
+                <input type="text" id="username" placeholder="Username">
+                <br>
+                <label>Password</label>
+                <br>
+                <input type="text" id="password" placeholder="Password">
+                <br>
+                <input type="submit" onClick="login()">
+            </form>
+            <br>
+            <span id="UsernameSpan"></span>
+            <br>
+            <span id="PasswordSpan"></span>
+        </div>
     </body>
 </html>
